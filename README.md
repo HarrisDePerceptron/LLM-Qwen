@@ -2,6 +2,9 @@
 
 
 ```
+conda create -n qwen python=3.11
+conda activate qwen
+
 conda install pytorch==2.3.0 torchvision==0.18.0 torchaudio==2.3.0 pytorch-cuda=12.1 -c pytorch -c nvidia
 
 conda install nvidia/label/cuda-12.1.0::cuda

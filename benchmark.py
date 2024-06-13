@@ -45,6 +45,10 @@ def run_inference(model, tokenizer, prompt: str):
 
 
 def main():
+    if not torch.cuda.is_available():
+        print("Did not detect an nvidia gpu. exiting...")
+        return
+
     args = [{"flash_attn2": True}, {"flash_attn2": False}]
     prompt = (
         "explain computer cpu. my name is harris and i am a computer science student"
@@ -59,8 +63,8 @@ def main():
         "Qwen/Qwen2-0.5B-Instruct-GPTQ-Int4",
         "Qwen/Qwen2-0.5B-Instruct-AWQ",
     ]
-
-    b_f = open("benchmark.txt", "w")
+    today = datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
+    b_f = open(f"data/benchmark_{today}.txt", "w")
 
     for model_name in model_list:
         for arg in args:
@@ -68,6 +72,7 @@ def main():
             memory = torch.cuda.get_device_properties(0).total_memory
             r = torch.cuda.memory_reserved(0)
             allocated_memory = torch.cuda.memory_allocated(0) / (1024 * 1024)
+            allocated_memory = int(allocated_memory)
             for i in range(2):
                 t1 = datetime.now()
                 run_inference(model, tokenizer, prompt)
@@ -75,7 +80,7 @@ def main():
                 diff = t2 - t1
                 took = diff.total_seconds()
 
-                msg = f"{i} {model_name}, {str(arg)}, {allocated_memory}mem {took}s\n"
+                msg = f"{i} {model_name}, {str(arg)}, {allocated_memory}MB {took}s\n"
 
                 b_f.write(msg)
                 b_f.flush()
