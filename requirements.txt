@@ -19,7 +19,7 @@ llama-index-readers-llama-parse==0.1.4
 llama-index-readers-web==0.1.18
 llama-parse==0.4.4
 llamaindex-py-client==0.1.19
-numpy @ file:///croot/numpy_and_numpy_base_1708638617955/work/dist/numpy-1.26.4-cp311-cp311-linux_x86_64.whl#sha256=5f96f274d410a1682519282ae769c877d32fdbf171aa8badec7bf5e1d3a1748a
+numpy==1.26.4
 openai==1.33.0
 optimum==1.20.0
 pandas==2.2.2

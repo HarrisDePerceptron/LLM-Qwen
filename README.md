@@ -39,3 +39,20 @@ pip install bitsandbytes==0.42.1
 ```
 python -m vllm.entrypoints.openai.api_server --model Qwen/Qwen2-1.5B-Instruct-GPTQ-Int4
 ```
+
+## LLAMA.cpp 
+
+- Clone and build llama.cpp [llama.cpp](https://github.com/ggerganov/llama.cpp)  
+- Convert model weights to GGUF `python convert_hf_to_gguf.py ./models/<model-name>/huggingface-model-directory model-output.gguf`
+- Quantize weights [Quantize](https://github.com/ggerganov/llama.cpp/blob/master/examples/quantize/README.md)
+- RUN GGUF model inference
+
+```
+./llama-server -m ./models/<model-name>/model.gguf --port 8000
+
+
+You can access the web at `http://localhost:8000`
+```
+
+```
+```

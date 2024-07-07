@@ -5,7 +5,7 @@ from openai import OpenAI
 
 # Set OpenAI's API key and API base to use vLLM's API server.
 openai_api_key = "EMPTY"
-openai_api_base = "http://localhost:8000/v1"
+openai_api_base = "http://localhost:8000/"
 
 client = OpenAI(
     api_key=openai_api_key,
@@ -13,11 +13,12 @@ client = OpenAI(
 )
 
 prompts = [
-    "how many planets in our solor system. name them all. return a well formed json response ",
-    "your favourite one and why",
-    "write python code to calulate the factorial of an integer",
-    "now write it in rust",
-    "now write it in c++",
+    #"how many planets in our solor system. name them all. return a well formed json response ",
+    #"your favourite one and why",
+    #"write python code to calulate the factorial of an integer",
+   #"now write it in rust without using recursion",
+    #"now write it in c++",
+    "my name is haris. what is the meaning of this name in arabic"
 ]
 
 messages = [
@@ -29,9 +30,10 @@ for p in prompts:
     message = {"role": "user", "content": p}
     messages.append(message)
     chat_response = client.chat.completions.create(
-        model="Qwen/Qwen2-7B-Instruct-AWQ",
+        model="Qwen/Qwen2-1.5B-Instruct",
         messages=messages,  # type: ignore
         stream=True,
+
     )
     # response = chat_response.choices[0].message.content
     #

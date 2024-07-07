@@ -9,11 +9,11 @@ from llama_index.core.chat_engine.types import ChatMode
 
 documents = SimpleWebPageReader(html_to_text=True).load_data(
     [
-        "https://www.centrox.ai",
-        "https://www.centrox.io",
-        "https://www.centrox.io/aboutus",
-        "https://www.centrox.ai/contact",
-        "https://www.centrox.ai/team",
+#        "https://www.centrox.ai",
+#       "https://www.centrox.io",
+#        "https://www.centrox.io/aboutus",
+#        "https://www.centrox.ai/contact",
+#        "https://www.centrox.ai/team",
         "https://www.imdb.com/search/title/?title_type=feature&release_date=2024-01-18,2024-06-18&genres=mystery,thriller",
     ]
 )
@@ -45,14 +45,16 @@ def messages_to_prompt(messages):
 
 # llm = OpenAI()
 llm = OpenAILike(  # type: ignore
-    api_base="http://localhost:8000/v1",
+    api_base="http://localhost:8000",
     max_tokens=512,
     temperature=0,
     api_key="EMPTY",
-    model="Qwen/Qwen2-7B-Instruct-GPTQ-Int8",
+    model="Qwen/Qwen2-1.5B-Instruct",
     messages_to_prompt=messages_to_prompt,
     completion_to_prompt=completion_to_prompt,
 )
+
+llm.is_chat_model = True
 
 data = SimpleDirectoryReader(input_dir="./data").load_data()
 
@@ -70,15 +72,15 @@ chat_engine = index.as_chat_engine(
     verbose=True,
     streaming=True,
     llm=llm,
-    system_prompt=SHAKESPEARE_WRITING_ASSISTANT,
 )
 
 
-print("Shakesspear prompt....", SHAKESPEARE_WRITING_ASSISTANT)
 
 while True:
     human = input("Human: ")
+
     response = chat_engine.stream_chat(human)
+
 
     print("AI: ", end="")
     for res in response.response_gen:

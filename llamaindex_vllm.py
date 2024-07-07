@@ -41,12 +41,15 @@ def messages_to_prompt(messages):
 
 
 llm = OpenAILike(  # type: ignore
-    api_base="http://localhost:8000/v1",
+    api_base="http://localhost:8000",
     max_tokens=512,
     temperature=0,
     api_key="EMPTY",
-    model="Qwen/Qwen2-7B-Instruct-GPTQ-Int8",
+    model="Qwen/Qwen2-1.5B-Instruct",
 )
+
+llm.is_chat_model = True
+
 
 
 Settings.llm = llm
