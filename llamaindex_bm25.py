@@ -30,6 +30,11 @@ from llama_index.postprocessor.colbert_rerank import ColbertRerank
 
 from llama_index.core.retrievers import QueryFusionRetriever
 
+from llama_index.core.query_engine import SubQuestionQueryEngine
+
+from llama_index.core.tools import QueryEngineTool, ToolMetadata
+
+
 documents = SimpleDirectoryReader("./data/paul_graham").load_data()
 documents2 = SimpleDirectoryReader("./data").load_data()
 
@@ -66,7 +71,7 @@ index = VectorStoreIndex(
 
 vector_retriever = VectorIndexRetriever(index, similarity_top_k=5)
 
-bm25_retriever = BM25Retriever.from_defaults(nodes=nodes, similarity_top_k=5)
+bm25_retriever = BM25Retriever.from_defaults(nodes=nodes, similarity_top_k=10)
 
 # retriever_tools = [
 #    RetrieverTool.from_defaults(
@@ -97,8 +102,10 @@ colbert_reranker = ColbertRerank(
 retriever = QueryFusionRetriever(
     [vector_retriever, bm25_retriever],
     similarity_top_k=10,
-    num_queries=1,  # set this to 1 to disable query generation
+    num_queries=4,  # set this to 1 to disable query generation
     mode="reciprocal_rerank",
+    # mode="relative_score",
+    # mode="dist_based_score",
     use_async=True,
     verbose=True,
     # query_gen_prompt="...",  # we could override the query generation prompt here
@@ -106,6 +113,22 @@ retriever = QueryFusionRetriever(
 query_engine = RetrieverQueryEngine.from_args(
     retriever=retriever, llm=llm, node_postprocessors=[colbert_reranker]
 )
+
+
+# query_engine_tools = [
+#    QueryEngineTool(
+#        query_engine=query_engine_ret,
+#        metadata=ToolMetadata(
+#            name="knowledgebase",
+#            description="knowledge base to be used for answering every question",
+#        ),
+#    ),
+# ]
+#
+# query_engine = SubQuestionQueryEngine.from_defaults(
+#    query_engine_tools=query_engine_tools,
+#    use_async=True,
+# )
 
 
 response = query_engine.query("which school did Paul attend")
