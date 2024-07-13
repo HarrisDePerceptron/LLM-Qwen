@@ -56,3 +56,8 @@ You can access the web at `http://localhost:8000`
 
 ```
 ```
+
+## TODO 
+
+- Summary and Meta data use with retrievers
+- Multi document query and agent 
